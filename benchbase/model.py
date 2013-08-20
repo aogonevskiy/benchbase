@@ -166,7 +166,8 @@ def initialize_db(db):
     for table_name in table_names:
         sql_create = CREATE_QUERY.format(
             table=table_name,
-            fields=", ".join(['{0} {1}'.format(name, type) for name, type in SCHEMAS[table_name].items()]))
+            # some of the column names are sqlite3 keywords - need to quote them
+            fields=", ".join(['"{0}" {1}'.format(name, type) for name, type in SCHEMAS[table_name].items()]))
         logging.debug('Creating table {0}'.format(table_name))
         try:
             logging.debug(sql_create)

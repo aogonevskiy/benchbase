@@ -94,14 +94,15 @@ class Bencher(object):
                     continue
                 try:
                     logging.debug(row.attrib.keys())
-                    cols = 'bid' + ', ' + ', '.join(row.attrib.keys())
+
+                    # wrapping each column in quotes
+                    cols = 'bid' + ', ' + ', '.join('"{0}"'.format(w) for w in row.attrib.keys())
                     values = ('?, ' * (len(row.attrib.keys()) + 1))[:-2]
                     data = row.attrib.values()
                     data.insert(0, bid)
-                    db.execute(INSERT_QUERY.format(
-                            table=table_name,
-                            columns=cols,
-                            values=values), data)
+                    sql_query = INSERT_QUERY.format(table=table_name, columns=cols, values=values)
+                    logging.debug(sql_query)
+                    db.execute(sql_query, data)
                     count += 1
                 except Exception, e:
                     logging.warning(e)

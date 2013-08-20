@@ -12,3 +12,5 @@ benchbase.egg-info/
 test.csv
 data/
 env/
+*.iml
+.idea
